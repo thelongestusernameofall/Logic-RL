@@ -227,7 +227,7 @@ def tokenize_and_postprocess_data(prompt: str,
                                   max_length: int,
                                   pad_token_id: int,
                                   left_pad=True,
-                                  truncation='error'):
+                                  truncation='right'):
     """
     input_data is the output from tokenizer.
     """
@@ -259,7 +259,10 @@ def tokenize_and_postprocess_data(prompt: str,
             input_ids = input_ids[:, :max_length]
             attention_mask = attention_mask[:, :max_length]
         elif truncation == 'error':
-            raise NotImplementedError(f'{sequence_length=} is larger than {max_length=}')
+            input_ids = input_ids[:, :max_length]
+            attention_mask = attention_mask[:, :max_length]
+            print(f'Warning: {sequence_length=} is larger than {max_length=}')
+            # raise NotImplementedError(f'{sequence_length=} is larger than {max_length=}')
         else:
             raise NotImplementedError(f'Unknown truncation method {truncation}')
 
